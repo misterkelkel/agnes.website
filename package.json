@@ -4,12 +4,12 @@
   "private": true,
   "description": "innerwork circle — modular multi-site digital blueprint (3 Jamstack endpoints sharing one design system + headless CMS).",
   "workspaces": [
-    "site1-corporate-hub",
-    "site2-media-studios",
-    "site3-community-portal"
+    "_source/site1-corporate-hub",
+    "_source/site2-media-studios",
+    "_source/site3-community-portal"
   ],
   "scripts": {
-    "dev": "echo \"run: npm run dev --workspace siteN-corporate-hub\"",
-    "build": "npm run build --workspace site1-corporate-hub && npm run build --workspace site2-media-studios && npm run build --workspace site3-community-portal"
+    "dev": "echo \"run: npm run dev --workspace _source/siteN-corporate-hub\"",
+    "build": "npm run build --workspace _source/site1-corporate-hub && npm run build --workspace _source/site2-media-studios && npm run build --workspace _source/site3-community-portal"
   }
 }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="3-Day Intensive">
+  <rect width="1200" height="800" fill="#fcf8f2"/>
+  <rect x="0" y="0" width="1200" height="800" fill="none" stroke="#1b3322" stroke-width="2" opacity="0.15"/>
+  <circle cx="600" cy="330" r="120" fill="none" stroke="#1b3322" stroke-width="3" opacity="0.55"/>
+  <path d="M540 330 L600 270 L660 330 L600 390 Z" fill="none" stroke="#1b3322" stroke-width="3" opacity="0.8"/>
+  <text x="600" y="540" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="58" fill="#1b3322" font-weight="500">3-Day Intensive</text>
+  <text x="600" y="600" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="22" letter-spacing="4" fill="#1b3322" opacity="0.7">MIXED &#183; FLAGSHIP</text>
+</svg>

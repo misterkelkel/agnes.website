@@ -1,0 +1,16 @@
+# Build source + tooling (not deployed — GitHub Pages serves the published subfolders)
+_source/
+node_modules/
+
+# Astro local cache
+.astro/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Local preview helpers (not part of the site)
+__serve.py
+__verify.py
+preview.bat
