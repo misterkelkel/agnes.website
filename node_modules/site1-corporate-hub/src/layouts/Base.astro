@@ -1,0 +1,82 @@
+---
+// Site 1 — Base layout: imports shared design framework + global JSON-LD.
+import "@design-system/global.css";
+import "../styles/global.css";
+import SeoSchema from "@components/SeoSchema.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  schema?: Record<string, unknown>[];
+}
+
+const { title, description = "innerwork circle — corporate & program hub",
+        schema = [] } = Astro.props;
+
+const orgSchema = {
+  "@type": "Organization",
+  name: "innerwork circle",
+  url: "https://innerworkcircle.co",
+  description: "B2B/B2C programs, intensives, and leadership development.",
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="iw-site-header">
+      <div class="iw-container iw-site-header__inner">
+        <a href="/" class="iw-logo">innerwork circle</a>
+        <nav class="iw-nav">
+          <a href="/#programs">Programs</a>
+          <a href="/#testimonials">Voices</a>
+          <a href="/#enquire">Enquire</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="iw-site-footer">
+      <div class="iw-container">
+        <p>innerwork circle — corporate &amp; program hub</p>
+      </div>
+    </footer>
+
+    <SeoSchema graph={[orgSchema, ...schema]} />
+  </body>
+</html>
+
+<style>
+  .iw-site-header {
+    position: sticky; top: 0; z-index: var(--iw-z-header);
+    background: color-mix(in srgb, var(--iw-color-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--iw-color-line);
+  }
+  .iw-site-header__inner { display: flex; align-items: center;
+    justify-content: space-between; padding-block: var(--iw-space-2); }
+  .iw-logo { font-family: var(--iw-font-display); font-size: var(--iw-fs-md);
+    border: 0; letter-spacing: 0.02em; }
+  .iw-nav { display: flex; gap: var(--iw-space-3); font-family: var(--iw-font-meta);
+    font-size: var(--iw-fs-sm); }
+  .iw-nav a { border-bottom: 1px solid transparent; }
+  .iw-nav a:hover { border-bottom-color: var(--iw-color-accent); }
+  .iw-site-footer { border-top: 1px solid var(--iw-color-line);
+    padding-block: var(--iw-space-4); color: var(--iw-color-muted);
+    font-family: var(--iw-font-meta); font-size: var(--iw-fs-sm); }
+</style>

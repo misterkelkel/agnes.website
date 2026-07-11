@@ -1,0 +1,21 @@
+---
+// ============================================================================
+// SeoSchema.astro — invisible JSON-LD meta schema matrix
+// ----------------------------------------------------------------------------
+// Embeds native structured data so traditional search AND generative AI engines
+// (Perplexity, Gemini) can extract program blocks, event dates, and media
+// cleanly — the proposal's "built-in SEO / AEO / GEO" requirement.
+//
+// Pass a `graph` array of schema.org objects; this component serializes them
+// into a single @graph JSON-LD block.
+// ============================================================================
+
+interface Props {
+  graph: Record<string, unknown>[];
+}
+
+const { graph } = Astro.props;
+const json = JSON.stringify({ "@context": "https://schema.org", "@graph": graph }, null, 2);
+---
+
+<script type="application/ld+json" set:html={json} />

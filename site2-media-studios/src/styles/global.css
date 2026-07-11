@@ -1,0 +1,52 @@
+/* Site 2 — Creative Media Studios (Open Residency editorial style)
+   Premium editorial: oversized serif display, full-bleed layout grids,
+   restrained bronze accent, generous air. */
+@import "@design-system/global.css";
+
+/* Full-bleed editorial grid */
+.iw-studio-hero { min-height: 86vh; display: flex; flex-direction: column;
+  justify-content: flex-end; padding-block: var(--iw-space-6); }
+.iw-studio-title { font-size: var(--iw-fs-2xl); line-height: 0.98; margin: 0; }
+
+/* Podcast text-listing architecture */
+.iw-podcast-list { border-top: 1px solid var(--iw-color-line); }
+.iw-podcast-row { display: grid; grid-template-columns: 4rem 1fr auto;
+  gap: var(--iw-space-3); align-items: baseline;
+  padding-block: var(--iw-space-3); border-bottom: 1px solid var(--iw-color-line);
+  transition: padding-left var(--iw-dur) var(--iw-ease); }
+.iw-podcast-row:hover { padding-left: var(--iw-space-2); }
+.iw-podcast-row__num { font-family: var(--iw-font-meta); color: var(--iw-color-accent);
+  font-size: var(--iw-fs-sm); }
+.iw-podcast-row__title { font-family: var(--iw-font-display); font-size: var(--iw-fs-lg); }
+.iw-podcast-row__meta { font-family: var(--iw-font-meta); font-size: var(--iw-fs-xs);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase; color: var(--iw-color-muted); }
+
+/* Full layout grid for film themes */
+.iw-film-grid { display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--iw-space-3); }
+@media (max-width: 760px) { .iw-film-grid { grid-template-columns: 1fr; } }
+.iw-film-card { position: relative; aspect-ratio: 3 / 4; border-radius: var(--iw-radius-md);
+  overflow: hidden; border: 1px solid var(--iw-color-line); cursor: pointer;
+  background: var(--iw-color-surface-sunk); }
+.iw-film-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.iw-film-card__label { position: absolute; left: 0; right: 0; bottom: 0; padding: var(--iw-space-2);
+  background: linear-gradient(transparent, var(--iw-color-overlay)); color: var(--iw-color-bg); }
+.iw-film-card__label h3 { color: var(--iw-color-bg); margin: 0; }
+
+/* Laurels strip */
+.iw-laurels { display: flex; flex-wrap: wrap; gap: var(--iw-space-2); }
+.iw-laurel { font-family: var(--iw-font-meta); font-size: var(--iw-fs-xs);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase;
+  border: 1px solid var(--iw-color-line-strong); border-radius: var(--iw-radius-pill);
+  padding: 0.4rem 0.9rem; color: var(--iw-color-ink-soft); }
+
+/* Modal */
+.iw-modal { position: fixed; inset: 0; z-index: var(--iw-z-modal);
+  display: none; align-items: center; justify-content: center; padding: var(--iw-space-3); }
+.iw-modal.is-open { display: flex; }
+.iw-modal__scrim { position: absolute; inset: 0; background: var(--iw-color-overlay); }
+.iw-modal__panel { position: relative; z-index: 1; background: var(--iw-color-surface);
+  border-radius: var(--iw-radius-lg); max-width: 720px; width: 100%;
+  padding: var(--iw-space-4); box-shadow: var(--iw-shadow-lg); max-height: 90vh; overflow: auto; }
+.iw-modal__close { position: absolute; top: 1rem; right: 1rem; background: none;
+  border: 0; font-size: 1.5rem; cursor: pointer; color: var(--iw-color-ink); }

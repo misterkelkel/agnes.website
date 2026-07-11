@@ -1,0 +1,113 @@
+---
+// Site 2 — Home: Open Residency editorial — podcast listing, film grid+modals, press.
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import MediaFrame from "@components/MediaFrame.astro";
+
+const podcasts = (await getCollection("podcasts")).sort((a, b) => a.data.number - b.data.number);
+const films = (await getCollection("films")).sort((a, b) => a.data.order - b.data.order);
+const press = (await getCollection("press"));
+
+const filmSchema = films.map((f) => ({
+  "@type": "Movie", name: f.data.title, genre: f.data.theme, description: f.data.summary,
+}));
+const podcastSchema = podcasts.map((p) => ({
+  "@type": "PodcastEpisode", name: p.data.title, partOf: { "@type": "PodcastSeries", name: "innerwork" },
+}));
+---
+
+<Base
+  title="innerwork studios — films & conversations"
+  description="Cinematic documentary themes and the innerwork podcast, in an open residency editorial layout."
+  schema={[...filmSchema, ...podcastSchema]}
+>
+  <section class="iw-studio-hero iw-container">
+    <p class="iw-eyebrow">Creative Media Repository</p>
+    <h1 class="iw-studio-title">A studio for the<br />unfinished human story.</h1>
+    <p class="iw-lead">Twelve conversations. Six films. One continuing inquiry into how we live and lead.</p>
+  </section>
+
+  <section id="podcasts" class="iw-container">
+    <h2>Podcast — 12 Episodes</h2>
+    <div class="iw-podcast-list">
+      {podcasts.map((p) => (
+        <a class="iw-podcast-row" href={`#ep-${p.data.number}`}>
+          <span class="iw-podcast-row__num">{String(p.data.number).padStart(2, "0")}</span>
+          <span>
+            <span class="iw-podcast-row__title">{p.data.title}</span>
+            {p.data.guest && <span class="iw-podcast-row__meta"> · {p.data.guest}</span>}
+          </span>
+          <span class="iw-podcast-row__meta">{p.data.duration ?? ""}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="films" class="iw-container">
+    <h2>Films — 6 Cinematic Themes</h2>
+    <div class="iw-film-grid">
+      {films.map((f) => (
+        <button class="iw-film-card" data-film-open={f.slug} aria-label={`Open ${f.data.title}`}>
+          {f.data.cover && <img src={f.data.cover} alt={f.data.title} loading="lazy" />}
+          <span class="iw-film-card__label">
+            <p class="iw-eyebrow" style="margin:0;">{f.data.theme}</p>
+            <h3>{f.data.title}</h3>
+          </span>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <section id="press" class="iw-container">
+    <h2>Press &amp; Laurels</h2>
+    <div class="iw-laurels">
+      {press.flatMap((pr) => pr.data.quote ? [pr.data.outlet] : [pr.data.outlet]).map((o) => (
+        <span class="iw-laurel">{o}</span>
+      ))}
+    </div>
+    <ul style="margin-top: var(--iw-space-3);">
+      {press.map((pr) => (
+        <li>{pr.data.title} — <span class="iw-podcast-row__meta">{pr.data.outlet}</span></li>
+      ))}
+    </ul>
+  </section>
+
+  {/* Film modals */}
+  {films.map((f) => (
+    <div class="iw-modal" id={`modal-${f.slug}`} role="dialog" aria-modal="true" aria-label={f.data.title}>
+      <div class="iw-modal__scrim" data-film-close></div>
+      <div class="iw-modal__panel">
+        <button class="iw-modal__close" data-film-close aria-label="Close">×</button>
+        <p class="iw-eyebrow" style="margin:0;">{f.data.theme}</p>
+        <h3>{f.data.title}</h3>
+        <p>{f.data.summary}</p>
+        {f.data.laurels.length > 0 && (
+          <div class="iw-laurels">{f.data.laurels.map((l) => <span class="iw-laurel">{l}</span>)}</div>
+        )}
+        {f.data.embedUrl && (
+          <div style="margin-top: var(--iw-space-3);">
+            <MediaFrame url={f.data.embedUrl} title={`${f.data.title} trailer`} ratio="16 / 9" />
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</Base>
+
+<script>
+  const open = (slug: string) => document.getElementById(`modal-${slug}`)?.classList.add("is-open");
+  const close = (el: Element) => el.closest(".iw-modal")?.classList.remove("is-open");
+  document.querySelectorAll<HTMLElement>("[data-film-open]").forEach((b) =>
+    b.addEventListener("click", () => open(b.dataset.filmOpen!))
+  );
+  document.querySelectorAll<HTMLElement>("[data-film-close]").forEach((b) =>
+    b.addEventListener("click", () => close(b))
+  );
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") document.querySelectorAll(".iw-modal.is-open").forEach((m) => m.classList.remove("is-open"));
+  });
+</script>
+
+<style>
+  .iw-lead { font-size: var(--iw-fs-md); max-width: var(--iw-maxw-narrow); color: var(--iw-color-ink-soft); }
+</style>

@@ -1,0 +1,197 @@
+# ============================================================================
+# innerwork circle — UNIFIED HEADLESS CMS ADMIN CONSOLE (Decap CMS)
+# ----------------------------------------------------------------------------
+# One console manages content for all three endpoints. Content is written into
+# each owning site's `src/content/<collection>/` folder so every site builds
+# statically from its own git-tracked data (Jamstack: no runtime DB).
+#
+# DEV:  run `npx decap-server` alongside this config for local git auth.
+# PROD: swap `backend` to `git-gateway` + enable Netlify Identity.
+# ============================================================================
+
+backend:
+  name: local_git            # dev: local_git  |  prod: git-gateway
+  branch: main
+
+# Shared media bucket. Served from the apex domain so all three sub-sites can
+# reference the same uploads. For local dev this resolves to /media.
+media_folder: cms/media
+public_folder: /media
+
+# Optional: absolute production URL so editors preview cross-site media.
+# public_folder: https://innerworkcircle.co/media
+
+publish_mode: editorial_workflow
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+
+i18n:
+  structure: multiple_folders
+  locales: [en, zh]
+  default_locale: en
+
+collections:
+  # --------------------------------------------------------------------------
+  # SITE 1 — CORPORATE & PROGRAM HUB
+  # --------------------------------------------------------------------------
+  - name: "site1_programs"
+    label: "S1 · Programs"
+    folder: "site1-corporate-hub/src/content/programs"
+    slug: "{{slug}}"
+    summary: "{{title}} — {{audience}}"
+    create: true
+    fields:
+      - { name: title, label: Program Title, widget: string }
+      - { name: audience, label: Audience, widget: select,
+          options: [b2b, b2c, mixed] }
+      - { name: eyebrow, label: Eyebrow / Kicker, widget: string,
+          required: false }
+      - { name: duration, label: Duration, widget: string,
+          hint: "e.g. 3-Day Intensive" }
+      - { name: summary, label: Summary, widget: text }
+      - { name: body, label: Full Description, widget: markdown }
+      - { name: hero_image, label: Hero Image, widget: image,
+          required: false }
+      - { name: order, label: Row Order, widget: number, default: 0 }
+      - name: outcomes
+        label: Key Outcomes
+        widget: list
+        field: { name: item, label: Outcome, widget: string }
+      - { name: cta_label, label: CTA Label, widget: string,
+          default: "Enquire" }
+      - { name: cta_url, label: CTA URL, widget: string, required: false }
+
+  - name: "site1_testimonials"
+    label: "S1 · Testimonials"
+    folder: "site1-corporate-hub/src/content/testimonials"
+    slug: "{{slug}}"
+    summary: "{{name}} — {{role}}"
+    create: true
+    fields:
+      - { name: quote, label: Quote, widget: text }
+      - { name: name, label: Name, widget: string }
+      - { name: role, label: Role / Company, widget: string }
+      - { name: program, label: Related Program, widget: string,
+          required: false }
+      - { name: avatar, label: Avatar, widget: image, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+
+  - name: "site1_intake_submissions"
+    label: "S1 · Intake Submissions"
+    folder: "site1-corporate-hub/src/content/intake"
+    slug: "{{slug}}"
+    summary: "{{name}} — {{program}} ({{date}})"
+
+    # Form entries are written here by the intake form handler.
+    fields:
+      - { name: name, label: Name, widget: string }
+      - { name: email, label: Email, widget: string }
+      - { name: company, label: Company, widget: string, required: false }
+      - { name: program, label: Program of Interest, widget: string }
+      - { name: message, label: Message, widget: text, required: false }
+      - { name: date, label: Submitted, widget: datetime }
+
+  # --------------------------------------------------------------------------
+  # SITE 2 — CREATIVE MEDIA STUDIOS (Open Residency style)
+  # --------------------------------------------------------------------------
+  - name: "site2_podcasts"
+    label: "S2 · Podcast Episodes"
+    folder: "site2-media-studios/src/content/podcasts"
+    slug: "{{slug}}"
+    summary: "EP {{number}} — {{title}}"
+    create: true
+    fields:
+      - { name: number, label: "Episode #", widget: number }
+      - { name: title, label: Title, widget: string }
+      - { name: guest, label: Guest, widget: string, required: false }
+      - { name: summary, label: Summary, widget: text }
+      - { name: embed_url, label: Stream URL, widget: string,
+          hint: "YouTube / Vimeo / Spotify embed or share URL" }
+      - { name: duration, label: Duration, widget: string, required: false }
+      - { name: published_at, label: Published, widget: datetime }
+      - { name: cover, label: Cover Art, widget: image, required: false }
+
+  - name: "site2_films"
+    label: "S2 · Film Themes"
+    folder: "site2-media-studios/src/content/films"
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    create: true
+    fields:
+      - { name: title, label: Film Title, widget: string }
+      - { name: theme, label: Theme, widget: string }
+      - { name: summary, label: Synopsis, widget: text }
+      - { name: embed_url, label: Trailer URL, widget: string,
+          required: false }
+      - name: laurels
+        label: Festival Laurels
+        widget: list
+        field: { name: item, label: Laurel, widget: string }
+      - { name: cover, label: Still / Poster, widget: image, required: false }
+      - { name: order, label: Grid Order, widget: number, default: 0 }
+
+  - name: "site2_press"
+    label: "S2 · Press & Laurels"
+    folder: "site2-media-studios/src/content/press"
+    slug: "{{slug}}"
+    summary: "{{outlet}} — {{title}}"
+    create: true
+    fields:
+      - { name: outlet, label: Outlet, widget: string }
+      - { name: title, label: Headline, widget: string }
+      - { name: url, label: Link, widget: string, required: false }
+      - { name: date, label: Date, widget: datetime, required: false }
+      - { name: quote, label: Pull Quote, widget: text, required: false }
+
+  # --------------------------------------------------------------------------
+  # SITE 3 — COMMUNITY & RECURRING EVENT PORTAL
+  # --------------------------------------------------------------------------
+  - name: "site3_events"
+    label: "S3 · Timeline Events"
+    folder: "site3-community-portal/src/content/events"
+    slug: "{{slug}}"
+    summary: "{{date}} — {{title}}"
+    create: true
+    fields:
+      - { name: title, label: Event Title, widget: string }
+      - { name: track, label: Track, widget: select,
+          options: [inner-table, unfinished-conversations, threshold, general] }
+      - { name: date, label: Event Date, widget: datetime }
+      - { name: location, label: Location, widget: string, required: false }
+      - { name: summary, label: Summary, widget: text }
+      - { name: body, label: Details, widget: markdown, required: false }
+      - { name: cover, label: Cover, widget: image, required: false }
+
+  - name: "site3_editions"
+    label: "S3 · Event Editions (Archives)"
+    folder: "site3-community-portal/src/content/editions"
+    slug: "{{slug}}"
+    summary: "{{track}} — {{edition}}"
+    create: true
+    fields:
+      - { name: track, label: Track, widget: select,
+          options: [inner-table, unfinished-conversations, threshold] }
+      - { name: edition, label: Edition Label, widget: string,
+          hint: "e.g. April 2026" }
+      - { name: date, label: Held On, widget: datetime }
+      - name: gallery
+        label: Photo Gallery
+        widget: list
+        field: { name: image, label: Photo, widget: image }
+      - { name: note, label: Edition Note, widget: text, required: false }
+
+  - name: "site3_galleries"
+    label: "S3 · Galleries"
+    folder: "site3-community-portal/src/content/galleries"
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    create: true
+    fields:
+      - { name: title, label: Gallery Title, widget: string }
+      - { name: event, label: Related Event, widget: string, required: false }
+      - name: images
+        label: Images
+        widget: list
+        field: { name: image, label: Image, widget: image }

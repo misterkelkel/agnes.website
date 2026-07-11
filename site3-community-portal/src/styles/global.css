@@ -1,0 +1,35 @@
+/* Site 3 — Community & Recurring Event Portal
+   Chronological monthly timeline grid + multi-edition archive dropdowns. */
+@import "@design-system/global.css";
+
+/* Chronological timeline grid */
+.iw-timeline { border-left: 1px solid var(--iw-color-line-strong);
+  margin-left: 1rem; padding-left: var(--iw-space-3); }
+.iw-month { font-family: var(--iw-font-meta); font-size: var(--iw-fs-xs);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase;
+  color: var(--iw-color-accent); margin: var(--iw-space-4) 0 var(--iw-space-2); }
+.iw-event { position: relative; padding-block: var(--iw-space-2);
+  border-bottom: 1px solid var(--iw-color-line); }
+.iw-event::before { content: ""; position: absolute; left: calc(-1 * var(--iw-space-3) - 1rem - 4px);
+  top: 1.4rem; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--iw-color-bg); border: 2px solid var(--iw-color-accent); }
+.iw-event__date { font-family: var(--iw-font-meta); font-size: var(--iw-fs-xs);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase; color: var(--iw-color-muted); }
+.iw-event__title { font-family: var(--iw-font-display); font-size: var(--iw-fs-lg); margin: 0.2rem 0; }
+.iw-track-tag { display: inline-block; font-family: var(--iw-font-meta); font-size: var(--iw-fs-xs);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase;
+  border: 1px solid var(--iw-color-line-strong); border-radius: var(--iw-radius-pill);
+  padding: 0.2rem 0.7rem; color: var(--iw-color-ink-soft); margin-right: 0.5rem; }
+
+/* Multi-edition dropdown */
+.iw-editions { display: grid; gap: var(--iw-space-3); }
+.iw-edition { border: 1px solid var(--iw-color-line); border-radius: var(--iw-radius-md);
+  padding: var(--iw-space-3); }
+.iw-edition__select { font-family: var(--iw-font-body); font-size: var(--iw-fs-base);
+  color: var(--iw-color-ink); background: var(--iw-color-surface-sunk);
+  border: 1px solid var(--iw-color-line); border-radius: var(--iw-radius-sm);
+  padding: 0.6rem 0.9rem; width: 100%; max-width: 360px; }
+.iw-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--iw-space-2); margin-top: var(--iw-space-2); }
+.iw-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--iw-radius-sm);
+  border: 1px solid var(--iw-color-line); }

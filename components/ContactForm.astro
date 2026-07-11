@@ -1,0 +1,120 @@
+---
+// ============================================================================
+// DynamicContactForm.astro — schema-driven dynamic form component
+// ----------------------------------------------------------------------------
+// Field list is data-driven so the same component powers intake, enquiry, and
+// newsletter forms across sites. Posts to a Netlify-style form handler
+// (name="form-name" + hidden input) and is front-end validated before submit.
+//
+// Props:
+//   name      - form identifier (must match the Netlify/edge form name)
+//   fields    - array of field descriptors (see type below)
+//   ctaLabel  - submit button text
+//   action    - POST target (default: relative "/thank-you")
+// ============================================================================
+
+interface Field {
+  name: string;
+  label: string;
+  type?: "text" | "email" | "tel" | "textarea" | "select" | "checkbox";
+  required?: boolean;
+  placeholder?: string;
+  options?: string[];        // for select
+}
+
+interface Props {
+  name: string;
+  fields: Field[];
+  ctaLabel?: string;
+  action?: string;
+}
+
+const { name, fields, ctaLabel = "Submit", action = "/thank-you" } = Astro.props;
+---
+
+<form
+  class="iw-form"
+  name={name}
+  data-iw-form
+  method="POST"
+  action={action}
+  netlify
+  netlify-honeypot="bot-field"
+>
+  <p class="hidden" hidden>
+    <label>Don’t fill this: <input name="bot-field" /></label>
+  </p>
+  <input type="hidden" name="form-name" value={name} />
+
+  {fields.map((f) => (
+    <div class="iw-form__field">
+      <label for={`${name}-${f.name}`}>{f.label}{f.required && <span aria-hidden="true"> *</span>}</label>
+
+      {f.type === "textarea" ? (
+        <textarea
+          id={`${name}-${f.name}`}
+          name={f.name}
+          rows="4"
+          placeholder={f.placeholder}
+          required={f.required}
+        ></textarea>
+      ) : f.type === "select" ? (
+        <select id={`${name}-${f.name}`} name={f.name} required={f.required}>
+          <option value="" disabled selected>Select…</option>
+          {f.options?.map((o) => <option value={o}>{o}</option>)}
+        </select>
+      ) : f.type === "checkbox" ? (
+        <label class="iw-form__check">
+          <input type="checkbox" name={f.name} required={f.required} /> {f.placeholder}
+        </label>
+      ) : (
+        <input
+          id={`${name}-${f.name}`}
+          name={f.name}
+          type={f.type ?? "text"}
+          placeholder={f.placeholder}
+          required={f.required}
+        />
+      )}
+    </div>
+  ))}
+
+  <button type="submit" class="iw-form__submit">{ctaLabel}</button>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("[data-iw-form]").forEach((form) => {
+    form.addEventListener("submit", (e) => {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        form.reportValidity();
+      }
+      // Native submission proceeds to `action` on success (or Netlify handler).
+    });
+  });
+</script>
+
+<style>
+  .iw-form { display: grid; gap: var(--iw-space-2); max-width: 560px; }
+  .iw-form__field { display: grid; gap: 0.4rem; }
+  .iw-form label { font-family: var(--iw-font-meta); font-size: var(--iw-fs-sm);
+    font-weight: var(--iw-fw-medium); color: var(--iw-color-ink-soft); }
+  .iw-form input, .iw-form select, .iw-form textarea {
+    font-family: var(--iw-font-body); font-size: var(--iw-fs-base);
+    color: var(--iw-color-ink); background: var(--iw-color-surface-sunk);
+    border: 1px solid var(--iw-color-line); border-radius: var(--iw-radius-sm);
+    padding: 0.75rem 0.9rem; width: 100%; transition: border-color var(--iw-dur) var(--iw-ease);
+  }
+  .iw-form input:focus, .iw-form select:focus, .iw-form textarea:focus {
+    outline: none; border-color: var(--iw-color-accent);
+  }
+  .iw-form__check { display: flex; align-items: center; gap: 0.5rem; font-family: var(--iw-font-body); }
+  .iw-form__submit {
+    justify-self: start; font-family: var(--iw-font-meta); font-weight: var(--iw-fw-semibold);
+    letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase; font-size: var(--iw-fs-xs);
+    color: var(--iw-color-bg); background: var(--iw-color-ink);
+    border: 1px solid var(--iw-color-ink); border-radius: var(--iw-radius-pill);
+    padding: 0.8rem 1.8rem; cursor: pointer; transition: background var(--iw-dur) var(--iw-ease);
+  }
+  .iw-form__submit:hover { background: var(--iw-color-ink-soft); }
+</style>

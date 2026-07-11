@@ -1,0 +1,88 @@
+/* ============================================================================
+   innerwork circle — GLOBAL VISUAL CONFIGURATION FRAMEWORK
+   ----------------------------------------------------------------------------
+   SINGLE SOURCE OF TRUTH for the premium minimalist editorial design language
+   shared across all three endpoints (corporate hub, media studios, community
+   portal). Every site imports this file; do NOT redefine brand tokens locally.
+
+   Philosophy: cream/beige canvas, dark forest-green ink, elegant serif voice,
+   generous whitespace, hairline rules, restrained bronze accent.
+   ========================================================================== */
+
+:root {
+  /* ---- Color: premium minimalist editorial palette ---- */
+  --iw-color-bg:            #fcf8f2; /* cream / beige — primary canvas       */
+  --iw-color-surface:       #fffdf9; /* raised card / panel surface          */
+  --iw-color-surface-sunk:  #f4ede1; /* inset wells, form fields             */
+  --iw-color-ink:           #1b3322; /* dark forest green — primary text     */
+  --iw-color-ink-soft:      #3c5443; /* secondary headings / body emphasis   */
+  --iw-color-muted:         #6b7a6e; /* tertiary / meta / captions           */
+  --iw-color-line:          rgba(27, 51, 34, 0.12); /* hairline borders     */
+  --iw-color-line-strong:   rgba(27, 51, 34, 0.28); /* emphasis rules       */
+  --iw-color-accent:        #9c7b4d; /* muted bronze — sparing accent        */
+  --iw-color-accent-soft:   #e9ddc7; /* accent wash / hover tint            */
+  --iw-color-overlay:       rgba(27, 51, 34, 0.55); /* modal scrim          */
+
+  /* ---- Typography: elegant serif voice ---- */
+  --iw-font-serif: 'Cormorant Garamond', 'Playfair Display', 'Georgia',
+                   'Times New Roman', serif;
+  --iw-font-ui:    'Inter', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+
+  --iw-font-display: var(--iw-font-serif);
+  --iw-font-body:    var(--iw-font-serif);
+  --iw-font-meta:    var(--iw-font-ui);
+
+  /* Fluid type scale (clamp = mobile → desktop) */
+  --iw-fs-xs:   0.78rem;
+  --iw-fs-sm:   0.9rem;
+  --iw-fs-base: 1.0625rem;
+  --iw-fs-md:   1.25rem;
+  --iw-fs-lg:   clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem);
+  --iw-fs-xl:   clamp(2.2rem, 1.6rem + 2.6vw, 3.4rem);
+  --iw-fs-2xl:  clamp(3rem, 2rem + 4vw, 5rem);
+
+  --iw-lh-tight: 1.12;
+  --iw-lh-snug:  1.3;
+  --iw-lh-base:  1.65;
+
+  --iw-fw-light:    300;
+  --iw-fw-regular:  400;
+  --iw-fw-medium:   500;
+  --iw-fw-semibold: 600;
+
+  --iw-tracking-eyebrow: 0.18em; /* uppercase labels / kickers            */
+  --iw-tracking-normal:  0.01em;
+
+  /* ---- Spacing scale ---- */
+  --iw-space-1: 0.5rem;
+  --iw-space-2: 1rem;
+  --iw-space-3: 1.5rem;
+  --iw-space-4: 2.5rem;
+  --iw-space-5: 4rem;
+  --iw-space-6: 6rem;
+  --iw-space-7: 9rem;
+
+  /* ---- Layout ---- */
+  --iw-maxw:        1180px;
+  --iw-maxw-narrow: 760px;
+  --iw-gutter:      clamp(1.25rem, 4vw, 3rem);
+
+  /* ---- Radius / borders ---- */
+  --iw-radius-sm:  4px;
+  --iw-radius-md:  10px;
+  --iw-radius-lg:  18px;
+  --iw-radius-pill: 999px;
+
+  /* ---- Elevation ---- */
+  --iw-shadow-sm: 0 1px 2px  rgba(27, 51, 34, 0.06);
+  --iw-shadow-md: 0 8px 30px rgba(27, 51, 34, 0.08);
+  --iw-shadow-lg: 0 24px 60px rgba(27, 51, 34, 0.12);
+
+  /* ---- Motion ---- */
+  --iw-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --iw-dur:  320ms;
+
+  /* ---- Z-index ---- */
+  --iw-z-header: 100;
+  --iw-z-modal:  1000;
+}

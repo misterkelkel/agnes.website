@@ -1,0 +1,35 @@
+/* Site 1 — Corporate & Program Hub
+   Imports the shared premium-minimalist design framework once. */
+@import "@design-system/global.css";
+
+/* Site-specific layout: clean horizontal layout ROWS for program modules. */
+.iw-program-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--iw-space-5);
+  align-items: center;
+  padding-block: var(--iw-space-5);
+  border-top: 1px solid var(--iw-color-line);
+}
+.iw-program-row:nth-child(even) .iw-program-row__media { order: -1; }
+.iw-program-row__media {
+  aspect-ratio: 4 / 3;
+  background: var(--iw-color-surface-sunk);
+  border-radius: var(--iw-radius-md);
+  border: 1px solid var(--iw-color-line);
+  overflow: hidden;
+}
+.iw-program-row__media img { width: 100%; height: 100%; object-fit: cover; }
+.iw-program-row__meta { font-family: var(--iw-font-meta); font-size: var(--iw-fs-xs);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase; color: var(--iw-color-muted); }
+
+@media (max-width: 760px) {
+  .iw-program-row { grid-template-columns: 1fr; }
+  .iw-program-row:nth-child(even) .iw-program-row__media { order: 0; }
+}
+
+/* Testimonial band */
+.iw-quote { font-size: var(--iw-fs-lg); line-height: var(--iw-lh-snug);
+  font-style: italic; max-width: var(--iw-maxw-narrow); }
+.iw-quote__by { font-family: var(--iw-font-meta); font-size: var(--iw-fs-sm);
+  letter-spacing: var(--iw-tracking-eyebrow); text-transform: uppercase; color: var(--iw-color-muted); }
