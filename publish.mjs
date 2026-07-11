@@ -31,7 +31,11 @@ for (const entry of readdirSync(dist)) {
   cpSync(join(dist, entry), join(outDir, entry), { recursive: true, force: true });
 }
 
-// 2) rewrite rooted asset refs -> relative under outDir
+// 2) apply the GitHub Pages repository base path to every asset reference.
+//    Astro emits ROOTED paths (/_astro/...) because base is ""; we rewrite them
+//    to /agnes.website/<site>/... so they resolve on GitHub Pages. Any relative
+//    refs (./_astro/...) are normalised to the same absolute base.
+const BASE = `/agnes.website/${site}/`;
 const rewrite = (file) => {
   const s = statSync(file);
   if (s.isDirectory()) {
@@ -41,12 +45,15 @@ const rewrite = (file) => {
   if (!/\.(html|css|js|json)$/.test(file)) return;
   let txt = readFileSync(file, "utf8");
   const before = txt;
-  // HTML attributes: href="/_astro/..." or src="/media/..." -> "./..."
-  txt = txt.replace(/(href|src)="\/(_astro|media|admin)\//g, '$1="./$2/');
-  // CSS/JS url() references: url(/_astro/...) -> url(./_astro/...)
-  txt = txt.replace(/url\(\s*["']?\/(_astro|media|admin)\//g, 'url(./$1/');
+  // rooted:  href="/_astro/..."  src="/media/..."  ->  /agnes.website/<site>/...
+  txt = txt.replace(/(href|src)="\/(_astro|media|admin)\//g, `$1="${BASE}$2/`);
+  // relative (defensive):  href="./_astro/..."  ->  same absolute base
+  txt = txt.replace(/(href|src)="\.\/(_astro|media|admin)\//g, `$1="${BASE}$2/`);
+  // CSS/JS url() refs, rooted or relative
+  txt = txt.replace(/url\(\s*["']?\/(_astro|media|admin)\//g, `url(${BASE}$1/`);
+  txt = txt.replace(/url\(\s*["']?\.\/(_astro|media|admin)\//g, `url(${BASE}$1/`);
   if (txt !== before) writeFileSync(file, txt);
 };
 
 rewrite(outDir);
-console.log(`✓ Published ${site} → /${site}/ (asset refs relativized)`);
+console.log(`✓ Published ${site} → /${site}/ (asset base: ${BASE})`);
